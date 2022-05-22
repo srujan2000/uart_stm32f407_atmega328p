@@ -69,6 +69,7 @@ In uart2_config function Clock and uart are configured
 <code>
 
 RCC->APB1ENR |= RCC_APB1ENR_USART2EN; //Enable UART clk
+	
 RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;  //Enable GPIO A
 
 </code>
@@ -78,6 +79,7 @@ Here clock is enabled for uart2 and GPIO A. PA2 and PA3 are TX and RX pins of UA
 <code>
 
 	GPIOA->MODER |= GPIO_MODER_MODE2_1|GPIO_MODER_MODE3_1; //Set mode as Alternate function mode
+	
 	GPIOA->MODER &=  ~(GPIO_MODER_MODE2_0)| ~(GPIO_MODER_MODE3_0);
 
 	GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR2_0 |GPIO_OSPEEDER_OSPEEDR2_1|GPIO_OSPEEDER_OSPEEDR3_0|GPIO_OSPEEDER_OSPEEDR3_1; //very High speed for pin2 and 3;
@@ -98,10 +100,13 @@ GPIO alternate function for Pin 2 and 3 is set to '7' as alternate function for 
 <code>
 
 USART2->CR1 = 0x00;
+	
 USART2->CR1 |= USART_CR1_UE; //usart enable
+	
 USART2->CR1 &= ~(USART_CR1_M);; //8-bit word length
 
 USART2->CR1 |= USART_CR1_RE; //rx enable
+	
 USART2->CR1 |= USART_CR1_TE;//tx enable
 
 </code>
@@ -111,7 +116,7 @@ USART2->CR1 |= USART_CR1_TE;//tx enable
 <code>
 USART2->BRR = (3<<0) | (104<<4); //baud rate of 9600 at 16Mhz
 </code>
-First 3 bits are fraction part.
+	
 
 <h4>Baud rate calculation </h4>
 <img src="baud_rate_calc.jpg">
@@ -130,7 +135,9 @@ Fraction is 0.13 , 0.13x16= 2.56 =3(aprrpox) goes into fraction part of BRR.
 <code >
 
 void send_char(unsigned char data){
+	
 	USART2->DR = data;
+	
 	while(!(USART2->SR & (USART_SR_TC))); //Wait for tx complete
 }
 
@@ -139,16 +146,21 @@ void send_char(unsigned char data){
 This function is used to transmit the data.
 <img src="status_stm.jpg">
 
-while(!(USART2->SR & (USART_SR_TC))) loop waits till transmission complete bit is set in the status register.
+while(!(USART2->SR & (USART_SR_TC))) //loop waits till transmission complete bit is set in the status register.
 
 <code>
 
 while (1)
+	
   {
     /* USER CODE END WHILE */
+	
 	  send_string(data);
+	
 	  delay1();
+	
     /* USER CODE BEGIN 3 */
+	
   }
 
 </code>
@@ -158,9 +170,13 @@ In Main function , call send_string function to send the data.
 <code>
 
 volatile char *UCSR0_A = (char *)0xC0; // Control and status register A
+	
 volatile char *UCSR0_B = (char *)0xC1; // Control and status register B
+	
 volatile char *UCSR0_C = (char *)0xC2; // Control and status register C
+	
 volatile short *UBBR_0 = (short *)0xC4; // Register to set Baud rate 
+	
 volatile short *UDR_0   = (short *)0xC6; // Data Register 
 
 </code>
@@ -200,9 +216,13 @@ UBBR = 103.16 = 104 is selected
 <code>
 
 unsigned char usart_rx()
+	
 {
+	
   while (((*UCSR0_A)&0x80)==0);
+	
   return *UDR_0;
+	
 }
 
 </code>
@@ -216,12 +236,19 @@ while (((*UCSR0_A)&0x80)==0) waits till the USART receive complete Bit in Contro
 <code>
 
 void setup() {
+	
   init_USART();
+	
   char x;
+	
   while(1){
+	
     x = usart_rx();
+	
     Serial.print(x);
+	
   }
+	
 }
 
 </code>
