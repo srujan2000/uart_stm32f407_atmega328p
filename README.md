@@ -9,11 +9,11 @@ We will be using STM32F407VET6 and Atmega328p as a transmitter and receiver resp
 <h2>Contents</h2>
 <ul  style="background-color:#c5d4cc;padding-top: 10px;padding-bottom: 10px; list-style: none;" >
 
-<li><a href="#about"><h3>About UART</h3></a></li>
-<li><a href="#comp"><h3>Components</h3></a></li>
-<li><a href="#conn"><h3>Connections</h3></a></li>
-<li><a href="#code"><h3>Code Explanation</h3></a></li>
-<li><a href="#exp"><h3>Final Result</h3></a></li>
+<li><a href="#about"> <h3>About UART</h3></a></li>
+<li><a href="#comp"> <h3>Components</h3></a></li>
+<li><a href="#conn"> <h3>Connections</h3></a></li>
+<li><a href="#code"> <h3>Code Explanation</h3></a></li>
+<li><a href="#exp"> <h3>Final Result</h3></a></li>
 </li>
 </ul>
 </section>
