@@ -259,7 +259,7 @@ This is the main function, x variable is used to store the received data and pri
 
 
 <section id="exp">
-h2>Final Result</h2>
+<h2>Final Result</h2>
 	
 <h4>Transmitter</h4>
 Connect tx pin of stm32 to the CP2102 rx pin. Connect the CP2102 to USB port of PC. Download <a href="https://www.hw-group.com/software/hercules-setup-utility">
