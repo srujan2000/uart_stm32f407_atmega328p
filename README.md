@@ -66,27 +66,27 @@ Also Connect PA2(tx) to CP2102 (USB to TTL) to observe the transmitted data.
 <h3>Transmitter code(STM32F407VET6)</h3>
 In uart2_config function Clock and uart are configured
 
-<code>
+```
 
 RCC->APB1ENR |= RCC_APB1ENR_USART2EN; //Enable UART clk
 	
 RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;  //Enable GPIO A
 
-</code>
+```
 
 Here clock is enabled for uart2 and GPIO A. PA2 and PA3 are TX and RX pins of UART2.
 
-<code>
+```
 
-	GPIOA->MODER |= GPIO_MODER_MODE2_1|GPIO_MODER_MODE3_1; //Set mode as Alternate function mode
+   GPIOA->MODER |= GPIO_MODER_MODE2_1|GPIO_MODER_MODE3_1; //Set mode as Alternate function mode
 	
-	GPIOA->MODER &=  ~(GPIO_MODER_MODE2_0)| ~(GPIO_MODER_MODE3_0);
+   GPIOA->MODER &=  ~(GPIO_MODER_MODE2_0)| ~(GPIO_MODER_MODE3_0);
 
-	GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR2_0 |GPIO_OSPEEDER_OSPEEDR2_1|GPIO_OSPEEDER_OSPEEDR3_0|GPIO_OSPEEDER_OSPEEDR3_1; //very High speed for pin2 and 3;
+   GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR2_0 |GPIO_OSPEEDER_OSPEEDR2_1|GPIO_OSPEEDER_OSPEEDR3_0|GPIO_OSPEEDER_OSPEEDR3_1; //very High speed for pin2 and 3;
 
-	GPIOA->AFR[0] |= 0x00007700UL; //Alternate AF7(usart2) for pin and Alternate AF8(usart2) for pin2
+   GPIOA->AFR[0] |= 0x00007700UL; //Alternate AF7(usart2) for pin and Alternate AF8(usart2) for pin2
 	
-</code>
+```
 
 Here GPIO port mode for pin 2 and 3 is set to alternate function as we are using these pins for UART.
 
@@ -97,7 +97,7 @@ GPIO alternate function for Pin 2 and 3 is set to '7' as alternate function for 
 
 <img src="control_reg_stm.jpg" style="margin-top:20px">
 
-<code>
+```
 
 USART2->CR1 = 0x00;
 	
@@ -109,13 +109,13 @@ USART2->CR1 |= USART_CR1_RE; //rx enable
 	
 USART2->CR1 |= USART_CR1_TE;//tx enable
 
-</code>
+```
 
 <img src="brr_stm.jpg">
 
-<code>
+```
 USART2->BRR = (3<<0) | (104<<4); //baud rate of 9600 at 16Mhz
-</code>
+```
 	
 
 <h4>Baud rate calculation </h4>
@@ -132,7 +132,7 @@ Fraction is 0.13 , 0.13x16= 2.56 =3(aprrpox) goes into fraction part of BRR.
  check clock frequency of APB1 bus and make calculation as required.
 <img src="clock_config.jpg" style="margin-bottom:20px">
 
-<code >
+```
 
 void send_char(unsigned char data){
 	
@@ -141,14 +141,14 @@ void send_char(unsigned char data){
 	while(!(USART2->SR & (USART_SR_TC))); //Wait for tx complete
 }
 
-</code>
+```
 
 This function is used to transmit the data.
 <img src="status_stm.jpg">
 
 while(!(USART2->SR & (USART_SR_TC))) //loop waits till transmission complete bit is set in the status register.
 
-<code>
+```
 
 while (1)
 	
@@ -163,11 +163,12 @@ while (1)
 	
   }
 
-</code>
+```
 
 In Main function , call send_string function to send the data.
 <h3>Receiver code (Atmega328p)</h3>
-<code>
+
+```
 
 volatile char *UCSR0_A = (char *)0xC0; // Control and status register A
 	
@@ -179,11 +180,11 @@ volatile short *UBBR_0 = (short *)0xC4; // Register to set Baud rate
 	
 volatile short *UDR_0   = (short *)0xC6; // Data Register 
 
-</code>
+```
 
 Here, we initialized the address of the registers to used, Control and status register A and B are used to check the status of the UART. Control and status register C is used to select the mode,parity,stop bits and synchronous/asynchronous transmission. UBBR register is used to set the baud rate. UDR register is used for data buffer.
 
-<code>
+```
 
 void init_USART(){
 
@@ -192,7 +193,7 @@ void init_USART(){
   *UBBR_0 = 104; 
 }
 
-</code>
+```
 
 
 <img src="uart_B.jpg" style="margin-top:20px;">
@@ -213,7 +214,7 @@ fosc = 16Mhz;
 UBBR = ((16mhz)/(16x9600))-1
 UBBR = 103.16 = 104 is selected
 
-<code>
+```
 
 unsigned char usart_rx()
 	
@@ -224,8 +225,7 @@ unsigned char usart_rx()
   return *UDR_0;
 	
 }
-
-</code>
+```
 
 <img src="usart_A1.jpg" >
 
@@ -233,7 +233,7 @@ This function is send the received data once the reception is completed.
 while (((*UCSR0_A)&0x80)==0) waits till the USART receive complete Bit in Control and status register A is cleared and then received data in the UDR register is returned.
 
 
-<code>
+```
 
 void setup() {
 	
@@ -251,7 +251,7 @@ void setup() {
 	
 }
 
-</code>
+```
 
 This is the main function, x variable is used to store the received data and printed.
 
