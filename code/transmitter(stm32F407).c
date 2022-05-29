@@ -137,11 +137,6 @@ void send_string(char *str){
 	}
 }
 
-void USART2_IRQHandler(void){
-	 send_string(data);
-	  delay1();
-}
-
 void delay1(){
 	volatile long i;
 	for(i=0;i<300000;i++);
